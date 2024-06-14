@@ -112,7 +112,7 @@ class User(db.Model):
         secondaryjoin=(Follows.user_being_followed_id == id)
     )
 
-    liked_messages = db.relationship('Like', backref='user', lazy=True)
+    # liked_messages = db.relationship('Like', backref='user', lazy=True)
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
@@ -217,12 +217,15 @@ class Like(db.Model):
     __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    message_id = db.Column(db.Integer, db.ForeignKey('messages.id'), nullable=False)
-    user_rel = db.relationship('User', backref='likes')
     
-    user = db.relationship('User', backref='likes')
-    message = db.relationship('Message', backref='liked_by')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    
+    message_id = db.Column(db.Integer, db.ForeignKey('messages.id'), nullable=False)
+    
+    # user_rel = db.relationship('User', backref='likes')
+    
+    user = db.relationship('User', backref='user_likes')
+    message = db.relationship('Message', backref='message_likes')
 
 # Add this to the User model
 User.likes = db.relationship('Message', secondary='likes', backref='liked_by')

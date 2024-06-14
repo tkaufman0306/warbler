@@ -89,6 +89,8 @@ def signup():
     and re-present form.
     """
 
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
     form = UserAddForm()
 
     if form.validate_on_submit():
@@ -137,6 +139,7 @@ def login():
 def logout():
     """Handle logout of user."""
     do_logout()
+    
     flash("You have successfully logged out.", "success")
     return redirect('/login')
 
